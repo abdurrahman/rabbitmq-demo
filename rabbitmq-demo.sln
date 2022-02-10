@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1FF6681D-396
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQSample", "src\RabbitMQSample\RabbitMQSample.csproj", "{ECD81EB7-43BA-4C10-A337-EC0610529B0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "src\ConsoleApp1\ConsoleApp1.csproj", "{EDD3682D-E47B-40D3-9975-16A9B86B96FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopicExchange", "src\TopicExchange\TopicExchange.csproj", "{EDD3682D-E47B-40D3-9975-16A9B86B96FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

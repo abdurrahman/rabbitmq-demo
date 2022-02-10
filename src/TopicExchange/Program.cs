@@ -4,7 +4,7 @@ using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-Console.WriteLine("Hello, World!");
+Console.WriteLine("Topic Exchange - RabbitMQ");
 
 var factory = new ConnectionFactory();
 factory.Uri = new Uri("amqp://guest:guest@localhost:5672");
@@ -14,7 +14,7 @@ var channel = connection.CreateModel();
 var exchangeName = "chat";
 var queueName = System.Guid.NewGuid().ToString();
             
-channel.ExchangeDeclare(exchangeName, ExchangeType.Fanout);
+channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
 channel.QueueDeclare(queueName, true, true, true);
 channel.QueueBind(queueName, exchangeName, string.Empty);
 
