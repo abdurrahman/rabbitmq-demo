@@ -10,10 +10,13 @@ var factory = new ConnectionFactory();
 factory.Uri = new Uri("amqp://guest:guest@localhost:5672");
 var connection = factory.CreateConnection();
 var channel = connection.CreateModel();
-         
+
 var exchangeName = "chat";
 var queueName = System.Guid.NewGuid().ToString();
-            
+
+Console.WriteLine($"channel information: \n{channel.ChannelNumber}");
+Console.WriteLine($"queue name: {queueName}");
+
 channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
 channel.QueueDeclare(queueName, true, true, true);
 channel.QueueBind(queueName, exchangeName, string.Empty);
@@ -22,7 +25,7 @@ var consumer = new EventingBasicConsumer(channel);
 consumer.Received += (sender, eventArgs) =>
 {
     var text = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
-    Console.WriteLine(text);
+    Console.WriteLine($"{eventArgs.RoutingKey}, {text}");
 };
 
 channel.BasicConsume(queueName, true, consumer);
