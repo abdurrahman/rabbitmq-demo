@@ -11,13 +11,14 @@ factory.Uri = new Uri("amqp://guest:guest@localhost:5672");
 var connection = factory.CreateConnection();
 var channel = connection.CreateModel();
 
-var exchangeName = "chat";
+Console.WriteLine("Create a topic");
+var exchangeName = Console.ReadLine();
 var queueName = System.Guid.NewGuid().ToString();
+channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
 
 Console.WriteLine($"channel information: \n{channel.ChannelNumber}");
 Console.WriteLine($"queue name: {queueName}");
 
-channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
 channel.QueueDeclare(queueName, true, true, true);
 channel.QueueBind(queueName, exchangeName, string.Empty);
 
