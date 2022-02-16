@@ -1,23 +1,23 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using System.Text;
+﻿using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 Console.WriteLine("Topic Exchange - RabbitMQ");
 
-var factory = new ConnectionFactory();
-factory.Uri = new Uri("amqp://guest:guest@localhost:5672");
-var connection = factory.CreateConnection();
-var channel = connection.CreateModel();
+var factory = new ConnectionFactory
+{
+    Uri = new Uri("amqp://guest:guest@localhost:5672")
+};
+using var connection = factory.CreateConnection();
+using var channel = connection.CreateModel();
 
 Console.WriteLine("Create a topic");
 var exchangeName = Console.ReadLine();
-var queueName = System.Guid.NewGuid().ToString();
-channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
+channel.ExchangeDeclare(exchangeName, ExchangeType.Topic,false ,false);
 
-Console.WriteLine($"channel information: \n{channel.ChannelNumber}");
-Console.WriteLine($"queue name: {queueName}");
+Console.WriteLine("Give us a queue name:");
+// var queueName = Guid.NewGuid().ToString();
+var queueName = Console.ReadLine();
 
 channel.QueueDeclare(queueName, true, true, true);
 channel.QueueBind(queueName, exchangeName, string.Empty);
@@ -26,7 +26,7 @@ var consumer = new EventingBasicConsumer(channel);
 consumer.Received += (sender, eventArgs) =>
 {
     var text = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
-    Console.WriteLine($"{eventArgs.RoutingKey}, {text}");
+    Console.WriteLine($"{eventArgs.Exchange} {eventArgs.BasicProperties.UserId} - {text}");
 };
 
 channel.BasicConsume(queueName, true, consumer);
@@ -34,12 +34,7 @@ channel.BasicConsume(queueName, true, consumer);
 var input = Console.ReadLine();
 while (input != string.Empty)
 {
-    Console.SetCursorPosition(0, Console.CursorTop - 1);
-
     var bytes = Encoding.UTF8.GetBytes(input);
     channel.BasicPublish(exchangeName, string.Empty, null, bytes);
     input = Console.ReadLine();
 }
-            
-channel.Close();
-connection.Close();
