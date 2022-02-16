@@ -16,8 +16,8 @@ var exchangeName = Console.ReadLine();
 channel.ExchangeDeclare(exchangeName, ExchangeType.Topic,false ,false);
 
 Console.WriteLine("Give us a queue name:");
-// var queueName = Guid.NewGuid().ToString();
-var queueName = Console.ReadLine();
+var queueName = Guid.NewGuid().ToString()[0..8];
+Console.WriteLine($"QueueName: {queueName}");
 
 channel.QueueDeclare(queueName, true, true, true);
 channel.QueueBind(queueName, exchangeName, string.Empty);
@@ -26,7 +26,7 @@ var consumer = new EventingBasicConsumer(channel);
 consumer.Received += (sender, eventArgs) =>
 {
     var text = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
-    Console.WriteLine($"{eventArgs.Exchange} {eventArgs.BasicProperties.UserId} - {text}");
+    Console.WriteLine($"{eventArgs.Exchange} - {text}");
 };
 
 channel.BasicConsume(queueName, true, consumer);
