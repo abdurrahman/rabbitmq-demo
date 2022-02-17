@@ -4,7 +4,7 @@ using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace RabbitMQSample
+namespace QueueService
 {
     public class RabbitMQService
     {   

@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using RabbitMQ.Client;
 
-namespace RabbitMQSample
+namespace QueueService
 {
     public class Publisher
     {
