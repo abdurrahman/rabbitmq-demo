@@ -1,8 +1,4 @@
-using System;
-using System.Linq;
-using System.Text;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 
 namespace QueueService
 {
