@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using System.Text;
+﻿using System.Text;
 using RabbitMQ.Client;
 
 Console.WriteLine("__Direct Exchange__");
@@ -16,12 +14,17 @@ using (var channel = connection.CreateModel())
     var message = (args.Length > 1)
         ? string.Join(" ", args.Skip(1).ToArray())
         : "Hello World!";
-    var body = Encoding.UTF8.GetBytes(message);
-    channel.BasicPublish(exchange: "direct_logs",
-        routingKey: severity,
-        basicProperties: null,
-        body: body);
-    Console.WriteLine(" [x] Sent '{0}':'{1}'", severity, message);
+    
+    while (!string.IsNullOrEmpty(message))
+    {
+        var body = Encoding.UTF8.GetBytes(message);
+        channel.BasicPublish(exchange: "direct_logs",
+            routingKey: severity,
+            basicProperties: null,
+            body: body);
+        Console.WriteLine(" [x] Sent '{0}':'{1}'", severity, message);
+        message = Console.ReadLine();
+    }
 }
 
 Console.WriteLine(" Press [enter] to exit.");
