@@ -53,6 +53,7 @@ using(var channel = connection.CreateModel())
 
     foreach(var severity in args)
     {
+        Console.WriteLine("Severity:{0}", severity);
         channel.QueueBind(queue: queueName,
             exchange: "direct_logs",
             routingKey: severity);
