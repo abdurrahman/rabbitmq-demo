@@ -32,6 +32,20 @@
     </nav>
 </div>
 
+<MudPaper Width="250px" Elevation="0" Class="py-3">
+    <MudNavMenu Bordered="true">
+        <MudNavLink Href="/dashboard">Dashboard</MudNavLink>
+        <MudNavLink Match="NavLinkMatch.Prefix" Href="/components/navmenu">Servers</MudNavLink>
+        <MudNavLink Href="/billing" Disabled="true">Billing</MudNavLink>
+        <MudNavGroup Title="Contents" Expanded="true">
+            <MudNavLink Href="/fetchdata">Users</MudNavLink>
+            <MudNavLink Href="/user">Weathers</MudNavLink>
+        </MudNavGroup>
+        <MudNavLink Href="/about">About</MudNavLink>
+    </MudNavMenu>
+</MudPaper>
+
+
 @code {
     private bool collapseNavMenu = true;
 
