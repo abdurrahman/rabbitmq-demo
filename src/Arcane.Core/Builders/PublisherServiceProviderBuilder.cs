@@ -19,24 +19,26 @@ internal class PublisherServiceProviderBuilder : IPublisherServiceProviderBuilde
         Action<IPublisherServiceOptionBuilder<TOption>> serviceBuilderAction)
         where TOption : BasicQueueInstanceOption
     {
-        throw new NotImplementedException();
+        var publisherServiceOptionBuilder = new PublisherServiceOptionBuilder<TOption>();
+        serviceBuilderAction?.Invoke(publisherServiceOptionBuilder);
+        var publisherServiceOption = publisherServiceOptionBuilder.Build(option);
+        publisherServiceOption.QueueServiceInjection?.Invoke(_services);
+        _publisherServiceProviders.Add(tag, publisherServiceOption.QueueServiceFactory);
+
+        return this;
     }
 
     public IPublisherServiceProviderBuilder AddBasicPublisher(
         string tag,
         BasicQueueInstanceOption option,
-        Action<IPublisherServiceOptionBuilder<BasicQueueInstanceOption>> serviceBuilderAction)
-    {
-        throw new NotImplementedException();
-    }
+        Action<IPublisherServiceOptionBuilder<BasicQueueInstanceOption>> serviceBuilderAction) 
+        => AddPublisher(tag, option, serviceBuilderAction);
 
     public IPublisherServiceProviderBuilder AddExchangePublisher(
         string tag,
         ExchangeQueueInstanceOption option,
         Action<IPublisherServiceOptionBuilder<ExchangeQueueInstanceOption>> serviceBuilderAction)
-    {
-        throw new NotImplementedException();
-    }
+        => AddPublisher(tag, option, serviceBuilderAction);
 
     public Func<IServiceProvider, IPublisherServiceProvider> Build() =>
         sp => new PublisherServiceProvider(_publisherServiceProviders.ToDictionary(c => c.Key, c => c.Value(sp)));

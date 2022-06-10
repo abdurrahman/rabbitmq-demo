@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Arcane.Core.Extensions;
+namespace Arcane.Core;
 
 public static class QueueExtensions
 {
