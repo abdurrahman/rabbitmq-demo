@@ -17,7 +17,7 @@ public static class ConsumerFactory
         var consumerServiceOptionBuilder = new ConsumerServiceOptionBuilder();
         serviceBuilderAction(consumerServiceOptionBuilder);
         var consumerMethod = consumerType.GetMethod(nameof(IConsumer<object>.ConsumeAsync));
-        var bodyType = consumerMethod.GetParameters().First().ParameterType;
+        var bodyType = consumerMethod?.GetParameters().First().ParameterType;
         var consumerServiceOption = consumerServiceOptionBuilder.Build(bodyType, option, sp =>
             {
                 var consumer = sp.GetService(consumerType);
@@ -35,5 +35,14 @@ public static class ConsumerFactory
         ConsumerServices[id] = consumerService;
         consumerService.RunAsync();
         return id;
+    }
+
+    public static void DestroyConsumer(Guid id)
+    {
+        if (!ConsumerServices.TryRemove(id, out var consumerService))
+        {
+            return;
+        }
+        consumerService.Dispose();
     }
 }
