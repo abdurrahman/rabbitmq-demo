@@ -18,8 +18,40 @@ public class ExchangePublisherService : IPublisherService
         _option = option;
     }
     
-    public Task PublishAsync(object data, BasicDeliverProperties? publishProperties = null)
+    public async Task PublishAsync(object data, BasicDeliverProperties? publishProperties = null)
     {
-        throw new NotImplementedException();
+        var basicProperties = publishProperties?.ConvertToBasicProperties(_channel) ?? _channel.CreateBasicProperties();
+
+        var routes = _option.Routes.Any()
+            ? _option.Routes
+            : new List<string>() {string.Empty};
+
+        var byteData = data.SerializeToByteArray();
+
+        if (_option.Routes.Count() == 1)
+        {
+            await Task.Run(() => _channel.BasicPublish(
+                exchange: _option.Exchange,
+                routingKey: _option.Routes.First(),
+                basicProperties: basicProperties,
+                body: byteData
+            ));
+        }
+        else
+        {
+            var publishBatch = _channel.CreateBasicPublishBatch();
+            foreach (var route in routes)
+            {
+                publishBatch.Add(
+                    exchange: _option.Exchange,
+                    routingKey: _option.Routes.First(),
+                    mandatory: false,
+                    properties: basicProperties,
+                    body: byteData
+                );
+            }
+
+            await Task.Run(() => publishBatch.Publish());
+        }
     }
 }
