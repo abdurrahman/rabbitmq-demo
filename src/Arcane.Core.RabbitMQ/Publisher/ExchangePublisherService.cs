@@ -42,6 +42,7 @@ public class ExchangePublisherService : IPublisherService
             var publishBatch = _channel.CreateBasicPublishBatch();
             foreach (var route in routes)
             {
+                // Todo: Use non-obsolete method
                 publishBatch.Add(
                     exchange: _option.Exchange,
                     routingKey: _option.Routes.First(),
