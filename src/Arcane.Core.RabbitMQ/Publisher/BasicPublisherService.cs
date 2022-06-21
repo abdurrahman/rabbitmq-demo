@@ -9,6 +9,7 @@ public class BasicPublisherService : IPublisherService
 
     public BasicPublisherService(IModel channel, BasicQueueInstanceOption option)
     {
+        new BasicQueueDeclareBehavior().Declare(channel, option);
         _channel = channel;
         _option = option;
     }
