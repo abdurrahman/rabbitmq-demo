@@ -5,8 +5,7 @@ namespace Arcane.Core.RabbitMQ;
 
 internal interface IMessageReceiveBehavior
 {
-    Task OnReceive(
-        IModel channel,
+    Task OnReceive(IModel channel,
         BasicDeliverEventArgs arg,
-        Func<byte[], DeliverProperties, Task> consumer);
+        Func<ReadOnlyMemory<byte>, DeliverProperties, Task> consumer);
 }

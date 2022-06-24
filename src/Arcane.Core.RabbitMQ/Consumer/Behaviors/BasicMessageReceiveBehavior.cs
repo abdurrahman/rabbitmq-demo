@@ -5,8 +5,21 @@ namespace Arcane.Core.RabbitMQ;
 
 internal class BasicMessageReceiveBehavior : IMessageReceiveBehavior
 {
-    public Task OnReceive(IModel channel, BasicDeliverEventArgs arg, Func<byte[], DeliverProperties, Task> consumer)
+    private readonly bool _autoAck;
+    
+    public BasicMessageReceiveBehavior(bool autoAck)
     {
-        throw new NotImplementedException();
+        _autoAck = autoAck;
+    }
+    
+    public async Task OnReceive(IModel channel,
+        BasicDeliverEventArgs arg,
+        Func<ReadOnlyMemory<byte>, DeliverProperties, Task> consumer)
+    {
+        await consumer(arg.Body, arg.ConvertToDeliverProperties());
+        if (!_autoAck)
+        {
+            channel.BasicAck(arg.DeliveryTag, multiple: false);
+        }
     }
 }

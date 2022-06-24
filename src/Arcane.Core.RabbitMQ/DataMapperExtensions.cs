@@ -1,6 +1,7 @@
 using System.Text;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 namespace Arcane.Core.RabbitMQ;
 
@@ -21,4 +22,7 @@ internal static class DataMapperExtensions
         // Todo: Add mapper
         return properties;
     }
+    
+    public static DeliverProperties ConvertToDeliverProperties(this BasicDeliverEventArgs arg)
+        => throw new NotImplementedException(); //.Map<BasicDeliverEventArgs, DeliverProperties>(arg);
 }
